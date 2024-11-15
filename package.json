@@ -1,0 +1,7 @@
+{
+  "name": "stuffie-api-server",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "echo 'No build necessary for Python project'"
+  }
+}
