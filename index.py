@@ -23,6 +23,14 @@ model = AutoModelForCausalLM.from_pretrained("microsoft/git-base-coco")
 class ImageURL(BaseModel):
     url: str
 
+@app.get("/test")
+async def test():
+    return {"message": "Hello World"}
+
+@app.post("/test-post")
+async def test_post():
+    return {"message": "Hello World"}
+
 @app.post("/generate-caption")
 async def generate_caption(image_url: ImageURL):
     try:
