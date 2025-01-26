@@ -1,5 +1,6 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from transformers import AutoProcessor, AutoModelForCausalLM
 import requests
@@ -23,7 +24,13 @@ model = AutoModelForCausalLM.from_pretrained("microsoft/git-base-coco")
 class ImageURL(BaseModel):
     url: str
 
-@app.post("/generate-caption")
+def add_cors_headers(response: JSONResponse):
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Methods"] = "POST"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+    return response
+
+@app.post("/generate-caption", dependencies=[Depends(add_cors_headers)])
 async def generate_caption(image_url: ImageURL):
     try:
         image = Image.open(requests.get(image_url.url, stream=True).raw)
